@@ -25,10 +25,10 @@ for r in range(len(initial_matrix)):
          connections[r].append(c)
 
 # establish the number of edges (aka the power the matrix is raised to)
-num_edges = int(input("Enter the number of edges in the path: "))
+num_edges = int(input("Enter the number of edges in the walk: "))
 
 # establish the start and end node, and stores that in the variables nodes
-node_to_node = input("Enter the nodes that you want to track the paths between with a space between the two (nodes are numbered from 0): ")
+node_to_node = input("Enter the nodes that you want to track the walks between with a space between the two (nodes are numbered from 0): ")
 nodes = [int(node_to_node[0]), int(node_to_node[-1])]
 
 # gives us matrix ^ num_edges
@@ -39,53 +39,55 @@ for i in range(num_edges-1):
 print("Matrix raised to the nth power, where n is the number of edges: ")
 print(tabulate(final_matrix))
 
-# initialize variable to hold all valid paths
-all_paths = []
+# initialize variable to hold all valid walks
+all_walks = []
 
-# updates all_paths to include all paths 
-def find_paths(curr_path): 
+# updates all_walks to include all walks 
+def find_walks(curr_walk): 
 
     # if the number of moves is correct, and the last node is right
-    if len(curr_path) == num_edges + 1 and curr_path[-1] == nodes[-1]:
-      all_paths.append(curr_path)
+    if len(curr_walk) == num_edges + 1 and curr_walk[-1] == nodes[-1]:
+      all_walks.append(curr_walk)
     
     # base case: if the number of edges exceeds the established number, stop
-    if len(curr_path) > num_edges:
+    if len(curr_walk) > num_edges:
        return
     
     # list is empty, start with the starting node
-    if len(curr_path) == 0:
-      curr_path.append(nodes[0])
+    if len(curr_walk) == 0:
+      curr_walk.append(nodes[0])
     
-    last_node = curr_path[-1]
+    last_node = curr_walk[-1]
     num_connections = len(connections[last_node])
 
-    # make a copy of the current path for each possible next step
-    copies = [copy.deepcopy(curr_path) for _ in range(num_connections)] 
+    # make a copy of the current walk for each possible next step
+    copies = [copy.deepcopy(curr_walk) for _ in range(num_connections)] 
 
-    # for each possible next step, add that step and recursively call find_paths() again
+    # for each possible next step, add that step and recursively call find_walks() again
     for i in range(num_connections):
        copies[i].append(connections[last_node][i])
-       find_paths(copies[i])
+       find_walks(copies[i])
 
 
-# run find_paths so that all_paths contains all valid paths
-find_paths([])
+# run find_walks so that all_walks contains all valid walks
+find_walks([])
 
-# check to see if the number of valid paths equals the corresponding entry in the matrix
-print("Does the number of valid path equal the corresponding entry in the matrix?: " 
-      + str((len(all_paths)) == final_matrix[nodes[0]][nodes[1]]))
-print("Number of paths: " + str(len(all_paths)))
-
-# prints all possible paths
-print("All possible paths are: ")
-for i in all_paths:
+# prints all possible walks
+print("All possible walks are: ")
+for i in all_walks:
    print(i)
 
+# check to see if the number of valid walks equals the corresponding entry in the matrix
+print("Does the number of valid walks equal the corresponding entry in the matrix?: " 
+      + str((len(all_walks)) == final_matrix[nodes[0]][nodes[1]]))
+print("Number of walks: " + str(len(all_walks)))
 
 
 
-############## tried to animate edges turning different colors to show path; doesn't work ##############
+
+
+
+############## tried to animate edges turning different colors to show walk; doesn't work ##############
 
 # # creates given graph
 # fig, ax = plt.subplots()
@@ -105,7 +107,7 @@ for i in all_paths:
 #     # form edge tuples
 #     edgelist = []
 #     for i in range(2):
-#        edgelist = (all_paths[0][i], all_paths[0][i+1])
+#        edgelist = (all_walks[0][i], all_walks[0][i+1])
 #     #    print("hi")
 #     #    print(edgelist)
 #     #    print("bye")
